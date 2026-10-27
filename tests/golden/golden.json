@@ -1,0 +1,100 @@
+{
+  "cases": {
+    "curve-linear_burn-g0.6": {
+      "hashes": {
+        "darwin-arm64-cv5.0-np2.5": "526194f40dd0993d4f59374343279c510a906af24768a07aff1e21e3e37146fc"
+      }
+    },
+    "curve-linear_burn-g1.0": {
+      "hashes": {
+        "darwin-arm64-cv5.0-np2.5": "3348bb4c957b0922a29cdce3821813b1612b97c9a2fda480aaa1788fc101beb9"
+      }
+    },
+    "curve-multiply-g0.6": {
+      "hashes": {
+        "darwin-arm64-cv5.0-np2.5": "49033d7ce4eca440dd869959db37826df63dc1d25d2d37ee6f3a252d8b71e7da"
+      }
+    },
+    "curve-multiply-g1.0": {
+      "hashes": {
+        "darwin-arm64-cv5.0-np2.5": "b139199e02922843cf360a69014610f742b0f0fec62a6b940923836ecb60ece0"
+      }
+    },
+    "curve-normal-g0.6": {
+      "hashes": {
+        "darwin-arm64-cv5.0-np2.5": "ce78d0fab068c4e993055c402ed6eb7d0b21c24910914967e140f8471122d146"
+      }
+    },
+    "curve-normal-g1.0": {
+      "hashes": {
+        "darwin-arm64-cv5.0-np2.5": "4efae2cdcb407eb77a3a1bc084f12d3329a472126d23ac0a0fa29ee45c3e97ed"
+      }
+    },
+    "flat-linear_burn-g0.6": {
+      "hashes": {
+        "darwin-arm64-cv5.0-np2.5": "f008316c8b93ff7e95671b72500721c48e8a05e76b5ba80343a13e9c3d640771"
+      }
+    },
+    "flat-linear_burn-g1.0": {
+      "hashes": {
+        "darwin-arm64-cv5.0-np2.5": "edf303f020001f0d37607a98e8f845f10843c096d31b0533ad31e8a00a340de8"
+      }
+    },
+    "flat-multiply-g0.6": {
+      "hashes": {
+        "darwin-arm64-cv5.0-np2.5": "da899a803d1d4575132de5850b70425d1fb9b35747e4476e2fb814d5346a2716"
+      }
+    },
+    "flat-multiply-g1.0": {
+      "hashes": {
+        "darwin-arm64-cv5.0-np2.5": "ed3f2710ea008f67b6a15eb6a94e57ab70ded52568db575a8258efe111429b20"
+      }
+    },
+    "flat-normal-g0.6": {
+      "hashes": {
+        "darwin-arm64-cv5.0-np2.5": "10154778062eae6ed5fabf50a5662f6a2a0b7634e37860673c1b46bad351b2e6"
+      }
+    },
+    "flat-normal-g0.6-noise": {
+      "hashes": {
+        "darwin-arm64-cv5.0-np2.5": "45606be2637c7c9f0baf5fc3cdd91484c6b85854977b691a707ab17296332181"
+      }
+    },
+    "flat-normal-g1.0": {
+      "hashes": {
+        "darwin-arm64-cv5.0-np2.5": "78682ace150b957fba6bb936bc85da81bfaa1da7751f85c7e614b68e5b0d8bdc"
+      }
+    },
+    "wrinkle-linear_burn-g0.6": {
+      "hashes": {
+        "darwin-arm64-cv5.0-np2.5": "329f5f01bcd744eb8c197191b2289a3dd08d0107eee905507dd0893b656899c1"
+      }
+    },
+    "wrinkle-linear_burn-g1.0": {
+      "hashes": {
+        "darwin-arm64-cv5.0-np2.5": "1599b8791437bfdcdcacb41d5a13370cf1a62b1edee2b1c9fc9e379bb3b78db9"
+      }
+    },
+    "wrinkle-multiply-g0.6": {
+      "hashes": {
+        "darwin-arm64-cv5.0-np2.5": "20b51c591ffc9055bb78f8db0790b543e64f2fb71b33bb7ee0e53eac95a010ff"
+      }
+    },
+    "wrinkle-multiply-g1.0": {
+      "hashes": {
+        "darwin-arm64-cv5.0-np2.5": "43c392c0bf0d336b1b301271781897d057391d2a8921698940a4593159d799ef"
+      }
+    },
+    "wrinkle-normal-g0.6": {
+      "hashes": {
+        "darwin-arm64-cv5.0-np2.5": "0bda1c393faa898cfe6d21398ba6805295c1c3c62c4c3fe4a85d677f83740302"
+      }
+    },
+    "wrinkle-normal-g1.0": {
+      "hashes": {
+        "darwin-arm64-cv5.0-np2.5": "656d6c82ceda950a3b370cb95b0579864dce9d9de150503a7992d96c2e32262b"
+      }
+    }
+  },
+  "version": 1
+}
