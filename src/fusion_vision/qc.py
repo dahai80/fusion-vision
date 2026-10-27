@@ -4,6 +4,7 @@ import cv2
 import numpy as np
 
 from .color import delta_e76, lab_from_rgb
+from .mask import dilate_mask
 
 logger = logging.getLogger(__name__)
 
@@ -13,10 +14,8 @@ def check_overflow(out, template, mask, tolerance_px=2):
     template = np.asarray(template)
     mask = np.asarray(mask)
     diff = np.any(out != template, axis=-1)
-    k = int(max(0, tolerance_px))
-    if k > 0:
-        kernel = np.ones((2 * k + 1, 2 * k + 1), dtype=np.uint8)
-        allowed = cv2.dilate((mask > 0).astype(np.uint8), kernel) > 0
+    if int(max(0, tolerance_px)) > 0:
+        allowed = dilate_mask(mask, tolerance_px) > 0
     else:
         allowed = mask > 0
     violated = diff & ~allowed

@@ -34,3 +34,14 @@ def rasterize_polygon(shape, points, feather_px=0.0):
         hard = feather(hard, feather_px)
     logger.debug("rasterize_polygon n_points=%d feather_px=%.2f", len(points), feather_px)
     return hard
+
+
+def dilate_mask(mask, radius_px):
+    mask = np.asarray(mask)
+    k = int(max(0, radius_px))
+    if k == 0:
+        return (mask > 0).astype(np.uint8) * 255
+    kernel = np.ones((2 * k + 1, 2 * k + 1), dtype=np.uint8)
+    out = cv2.dilate((mask > 0).astype(np.uint8), kernel) * 255
+    logger.debug("dilate_mask radius_px=%d", k)
+    return out

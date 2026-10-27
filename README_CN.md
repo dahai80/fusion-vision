@@ -73,6 +73,10 @@ from fusion_vision import compose, ComposeConfig, BlendMode, Placement, NoiseSpe
 
 管线顺序：`warp_to_quad` → `place` → `feather` → `apply_mask` → 光照（`luminance_field` + `adapt` + `grain`）→ `blend` → uint8 量化 → 红线断言。
 
+### 多图层：`compose_layers(template, layers, masks, cfgs)`
+
+按给定顺序串行确定性合成 —— 等价于链式调用 `compose()`。每一层都对上一层的结果做红线断言；所有图层都没碰过的像素与模板逐位一致。三个列表必须等长（否则 `InputShapeError`）。用于分镜排版 / 多贴纸场景；单图层仍用 `compose()` 快速路径。
+
 ## 算子说明
 
 所有算子都可单独导入，供高级管线使用。
@@ -87,11 +91,12 @@ from fusion_vision import compose, ComposeConfig, BlendMode, Placement, NoiseSpe
 
 Quad 语义：覆盖 (x0, y0)-(x1, y1) 的 quad 覆盖像素 x ∈ [x0, x1)、y ∈ [y0, y1)。退化（零面积 / 共线 / 自交）quad 抛 `DegenerateQuadError`。
 
-### `mask` — `apply_mask`、`feather`、`rasterize_polygon`
+### `mask` — `apply_mask`、`feather`、`rasterize_polygon`、`dilate_mask`
 
 - `apply_mask(rgba, mask_u8)`：alpha 乘以 mask/255。
 - `feather(rgba_or_rgb, sigma_px)`：高斯边缘柔化。
 - `rasterize_polygon(shape, points, feather_px=0.0)`：多边形转 uint8 蒙版。
+- `dilate_mask(mask, radius_px)`：方核二值膨胀，返回 0/255 uint8。用于构建 QC 容差区域或扩大摆放区。
 
 ### `lighting` — `luminance_field`、`adapt`、`grain`
 
@@ -254,4 +259,6 @@ python -m pytest tests/test_warp.py::test_v7_known_homography_corner_accuracy -v
 ruff check . && ruff format --check .
 ```
 
-布局：`src/fusion_vision/`（`warp` / `mask` / `lighting` / `blend` / `compose` / `qc` / `io` / `color` / `config` / `errors` / `_types`），`tests/`（单元 + `golden/` + `perf/`）。权威规格：`../architecture/fusion-vision-prd-1027.md`。代码风格：4 的倍数缩进、无 docstring、全路径有日志。
+布局：`src/fusion_vision/`（`warp` / `mask` / `lighting` / `blend` / `compose` / `qc` / `io` / `color` / `config` / `errors` / `_types`），`tests/`（单元 + `golden/` + `perf/`），`docs/`（消费方接入评估）。权威规格：`../architecture/fusion-vision-prd-1027.md`。代码风格：4 的倍数缩进、无 docstring、全路径有日志。
+
+消费方接入评估：[docs/drama-integration-eval.md](docs/drama-integration-eval.md)（fusion-drama 后期工序，M2）。

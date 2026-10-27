@@ -12,7 +12,7 @@ from ._types import (
 )
 from .blend import blend
 from .config import ComposeConfig
-from .errors import BaseImageAlteredError
+from .errors import BaseImageAlteredError, InputShapeError
 from .lighting import adapt, grain, luminance_field
 from .mask import apply_mask, feather
 from .warp import place, warp_to_quad
@@ -64,6 +64,27 @@ def compose(template, layer, mask, cfg):
         cfg.assert_base_intact,
         elapsed,
     )
+    return out
+
+
+def compose_layers(template, layers, masks, cfgs):
+    started = time.perf_counter()
+    layers = list(layers)
+    masks = list(masks)
+    cfgs = list(cfgs)
+    if not layers:
+        raise InputShapeError("compose_layers: layers is empty")
+    if not (len(layers) == len(masks) == len(cfgs)):
+        raise InputShapeError(
+            "compose_layers: layers/masks/cfgs length mismatch",
+            detail={"layers": len(layers), "masks": len(masks), "cfgs": len(cfgs)},
+        )
+    out = template
+    for i, (layer, mask, cfg) in enumerate(zip(layers, masks, cfgs, strict=True)):
+        out = compose(out, layer, mask, cfg)
+        logger.debug("compose_layers layer %d/%d done", i + 1, len(layers))
+    elapsed = time.perf_counter() - started
+    logger.info("compose_layers n=%d elapsed=%.3fs", len(layers), elapsed)
     return out
 
 

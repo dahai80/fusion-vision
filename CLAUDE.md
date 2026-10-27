@@ -23,10 +23,10 @@ First consumer: `business/ai-apparelmockup` (apparel print mockup batching). Sec
 ## Layout (per PRD §6)
 
 - `src/fusion_vision/warp.py` — `warp_to_quad`, `compute_homography`, `place`; resampling: LANCZOS4 upscale / pre-resize+INTER_LINEAR downscale (`cv2.warpPerspective` INTER_AREA is point sampling and aliases — never warp with INTER_AREA directly)
-- `src/fusion_vision/mask.py` — `apply_mask`, `feather` (gaussian), `rasterize_polygon`
+- `src/fusion_vision/mask.py` — `apply_mask`, `feather` (gaussian), `rasterize_polygon`, `dilate_mask`
 - `src/fusion_vision/lighting.py` — `luminance_field` (in-mask normalized, brightest region = 1.0), `adapt` (`RGB ×= L^γ`), seeded `grain`
 - `src/fusion_vision/blend.py` — NORMAL / MULTIPLY (white-base prints) / LINEAR_BURN; alpha is 0-1
-- `src/fusion_vision/compose.py` — pipeline: warp → place → feather → mask → lighting → blend → quantize → red-line assert
+- `src/fusion_vision/compose.py` — pipeline: warp → place → feather → mask → lighting → blend → quantize → red-line assert; `compose_layers` for sequential multi-layer
 - `src/fusion_vision/qc.py` — `check_overflow` / `check_blank` / `check_color` (CIELAB ΔE) / `check_sharpness` (Laplacian variance); metrics only
 - `src/fusion_vision/io.py` / `color.py` / `config.py` / `errors.py` / `_types.py`
 - `tests/golden/` — 19 cases (3 geometries × 3 blend modes × 2 γ + 1 seeded-noise), sha256-locked in `golden.json` per platform key; `update_golden.py` regenerates (semver minor+ + review required)

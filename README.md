@@ -73,6 +73,10 @@ from fusion_vision import compose, ComposeConfig, BlendMode, Placement, NoiseSpe
 
 Pipeline order: `warp_to_quad` → `place` → `feather` → `apply_mask` → lighting (`luminance_field` + `adapt` + `grain`) → `blend` → uint8 quantize → red-line assert.
 
+### Multi-layer: `compose_layers(template, layers, masks, cfgs)`
+
+Sequential deterministic composition — equivalent to chaining `compose()` calls, in the given order. Each layer is red-line-asserted against the result of the previous one; pixels untouched by *all* layers stay bit-identical to the template. Equal-length lists required (`InputShapeError` otherwise). Use for storyboard layouts / multi-sticker scenes; single `compose()` remains the fast path for one layer.
+
 ## Operators
 
 All operators are importable individually for advanced pipelines.
@@ -87,11 +91,12 @@ Perspective warp of the layer onto `dst_quad`. Resampling policy (protects text 
 
 Quad semantics: a quad spanning (x0, y0)-(x1, y1) covers pixels x ∈ [x0, x1), y ∈ [y0, y1). Degenerate (zero area / collinear / self-intersecting) quads raise `DegenerateQuadError`.
 
-### `mask` — `apply_mask`, `feather`, `rasterize_polygon`
+### `mask` — `apply_mask`, `feather`, `rasterize_polygon`, `dilate_mask`
 
 - `apply_mask(rgba, mask_u8)`: multiplies alpha by mask/255.
 - `feather(rgba_or_rgb, sigma_px)`: gaussian edge softening.
 - `rasterize_polygon(shape, points, feather_px=0.0)`: polygon → uint8 mask.
+- `dilate_mask(mask, radius_px)`: square-kernel binary dilation, returns 0/255 uint8. Use to build QC tolerance regions or grow a placement area.
 
 ### `lighting` — `luminance_field`, `adapt`, `grain`
 
@@ -254,4 +259,6 @@ python -m pytest tests/test_warp.py::test_v7_known_homography_corner_accuracy -v
 ruff check . && ruff format --check .
 ```
 
-Layout: `src/fusion_vision/` (`warp` / `mask` / `lighting` / `blend` / `compose` / `qc` / `io` / `color` / `config` / `errors` / `_types`), `tests/` (unit + `golden/` + `perf/`). Authoritative spec: `../architecture/fusion-vision-prd-1027.md`. Style: 4-space-multiple indent, no docstrings, logging on every path.
+Layout: `src/fusion_vision/` (`warp` / `mask` / `lighting` / `blend` / `compose` / `qc` / `io` / `color` / `config` / `errors` / `_types`), `tests/` (unit + `golden/` + `perf/`), `docs/` (consumer integration evaluations). Authoritative spec: `../architecture/fusion-vision-prd-1027.md`. Style: 4-space-multiple indent, no docstrings, logging on every path.
+
+Consumer integration evaluations: [docs/drama-integration-eval.md](docs/drama-integration-eval.md) (fusion-drama post-pass, M2).
