@@ -88,3 +88,27 @@ def test_compose_layers_length_mismatch_rejected():
         fv.compose_layers(template, [l1], [m1, m1], [c1])
     with pytest.raises(fv.InputShapeError):
         fv.compose_layers(template, [], [], [])
+
+
+def test_compose_config_accepts_blend_mode_str():
+    quad = ((16, 16), (112, 16), (112, 112), (16, 112))
+    cfg = fv.ComposeConfig(dst_quad=quad, blend_mode="multiply", lighting_gamma=0.0)
+    assert cfg.blend_mode is fv.BlendMode.MULTIPLY
+    cfg = fv.ComposeConfig(dst_quad=quad, blend_mode="LINEAR_BURN", lighting_gamma=0.0)
+    assert cfg.blend_mode is fv.BlendMode.LINEAR_BURN
+    assert (
+        fv.compose(
+            make_template("flat", size=(128, 128)),
+            make_layer(size=(64, 64)),
+            make_mask((128, 128, 3), shrink=16),
+            cfg,
+        ).dtype
+        == np.uint8
+    )
+
+
+def test_compose_config_rejects_unknown_blend_mode_str():
+    quad = ((16, 16), (112, 16), (112, 112), (16, 112))
+    with pytest.raises(fv.InputShapeError) as exc_info:
+        fv.ComposeConfig(dst_quad=quad, blend_mode="screen")
+    assert exc_info.value.detail["which"] == "blend_mode"

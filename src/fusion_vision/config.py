@@ -104,6 +104,18 @@ class ComposeConfig:
                 "feather_px must be >= 0",
                 detail={"which": "feather_px", "actual": self.feather_px},
             )
+        if isinstance(self.blend_mode, str) and not isinstance(self.blend_mode, BlendMode):
+            try:
+                object.__setattr__(self, "blend_mode", BlendMode(self.blend_mode.lower()))
+            except ValueError:
+                raise InputShapeError(
+                    "blend_mode string not recognized",
+                    detail={
+                        "which": "blend_mode",
+                        "actual": repr(self.blend_mode),
+                        "supported": [m.value for m in BlendMode],
+                    },
+                ) from None
         if not isinstance(self.blend_mode, BlendMode):
             raise InputShapeError(
                 "blend_mode must be a BlendMode",

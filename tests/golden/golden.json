@@ -65,6 +65,21 @@
         "darwin-arm64-cv5.0-np2.5": "78682ace150b957fba6bb936bc85da81bfaa1da7751f85c7e614b68e5b0d8bdc"
       }
     },
+    "real-tshirt-linear_burn-g0.0": {
+      "hashes": {
+        "darwin-arm64-cv5.0-np2.5": "3ec9524a36a6d3f08dab5b34e25d3856c9fb0202960301ddd8af9450efcd0daf"
+      }
+    },
+    "real-tshirt-multiply-g0.6": {
+      "hashes": {
+        "darwin-arm64-cv5.0-np2.5": "f6ea23e101271b0d73dd8a036bd0b95325a442851e5feb686530f7056bd5911a"
+      }
+    },
+    "real-tshirt-normal-g0.6": {
+      "hashes": {
+        "darwin-arm64-cv5.0-np2.5": "ce1b2e68fd6d1c5b9273d724154585091b2a6edb36e4e248580d94fe832afdd7"
+      }
+    },
     "wrinkle-linear_burn-g0.6": {
       "hashes": {
         "darwin-arm64-cv5.0-np2.5": "329f5f01bcd744eb8c197191b2289a3dd08d0107eee905507dd0893b656899c1"

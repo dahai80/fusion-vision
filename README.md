@@ -63,7 +63,7 @@ from fusion_vision import compose, ComposeConfig, BlendMode, Placement, NoiseSpe
 | `dst_quad` | 4×(x, y) | required | Destination corners on the canvas (any convex quad) |
 | `src_quad` | 4×(x, y) or None | None | Source crop in the layer; None = whole layer |
 | `placement` | `Placement` | center, scale 1.0 | Post-warp scale about anchor ("center" / "top_left") |
-| `blend_mode` | `BlendMode` | NORMAL | normal / multiply / linear_burn |
+| `blend_mode` | `BlendMode` | NORMAL | normal / multiply / linear_burn; a plain lowercase (or uppercase) string is auto-coerced, unknown strings raise `InputShapeError` |
 | `opacity` | float [0, 1] | 1.0 | Layer opacity |
 | `lighting_gamma` | float [0, 2] | 0.6 | 0 disables lighting adaptation |
 | `sigma` | float | 8.0 | Gaussian blur σ for the luminance field |
@@ -185,7 +185,7 @@ fusion-flow exception mapping (DAG worker convention):
 ## Determinism & Golden Regression
 
 - All randomness requires an explicit seed. Unseeded randomness does not exist in this library.
-- `tests/golden/` locks 19 output cases (3 base geometries × 3 blend modes × 2 γ + 1 seeded-noise case) as sha256 hashes in `golden.json`, keyed per platform (`{platform}-{machine}-cv{major.minor}-np{major.minor}`).
+- `tests/golden/` locks 22 output cases (3 base geometries × 3 blend modes × 2 γ + 1 seeded-noise case + 3 real-sample cases from consumer fixtures in `tests/samples/`) as sha256 hashes in `golden.json`, keyed per platform (`{platform}-{machine}-cv{major.minor}-np{major.minor}`).
 - On a platform with a matching key, the test is strict: output sha256 must equal the recorded hash. On any other platform it compares against the committed reference PNG with tolerance max_abs_diff ≤ 1.
 - **Any operator change that alters output bytes is a semver minor+ bump** and requires a reviewed `golden.json` + `reference/` update. To regenerate:
 

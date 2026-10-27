@@ -1,6 +1,7 @@
 import io
 import platform
 import sys
+from pathlib import Path
 
 import cv2
 import numpy as np
@@ -13,6 +14,14 @@ GAMMAS = (0.6, 1.0)
 NOISE_CASE = ("flat-normal-g0.6-noise", "flat", "NORMAL", 0.6, {"strength": 0.05, "seed": 7})
 SIZE = (256, 256)
 MARGIN = 48
+SAMPLES_DIR = Path(__file__).resolve().parent.parent / "samples"
+# Real consumer fixtures (ai-apparelmockup tshirt template + fixture design),
+# archi plan M2: 真实样图入 samples/ 扩 golden.
+REAL_CASES = (
+    ("real-tshirt-normal-g0.6", "real", "NORMAL", 0.6, None),
+    ("real-tshirt-multiply-g0.6", "real", "MULTIPLY", 0.6, None),
+    ("real-tshirt-linear_burn-g0.0", "real", "LINEAR_BURN", 0.0, None),
+)
 
 
 def platform_key():
@@ -29,6 +38,7 @@ def case_list():
                 name = f"{geometry}-{mode.lower()}-g{gamma}"
                 cases.append((name, geometry, mode, gamma, None))
     cases.append(NOISE_CASE)
+    cases.extend(REAL_CASES)
     return cases
 
 
@@ -74,7 +84,30 @@ def _make_mask():
     )
 
 
+def _build_real_case(mode, gamma):
+    template = fv.imread_rgb(str(SAMPLES_DIR / "tshirt_white_front.png"))
+    layer = fv.imread_rgba(str(SAMPLES_DIR / "fixture_design.png"))
+    mask = fv.imread_gray(str(SAMPLES_DIR / "tshirt_white_front_chest_mask.png"))
+    ys, xs = np.nonzero(mask)
+    quad = (
+        (float(xs.min()), float(ys.min())),
+        (float(xs.max()), float(ys.min())),
+        (float(xs.max()), float(ys.max())),
+        (float(xs.min()), float(ys.max())),
+    )
+    cfg = fv.ComposeConfig(
+        dst_quad=quad,
+        blend_mode=fv.BlendMode[mode],
+        lighting_gamma=gamma,
+        sigma=8.0,
+        feather_px=2.0,
+    )
+    return fv.compose(template, layer, mask, cfg)
+
+
 def build_case(name, geometry, mode, gamma, noise):
+    if geometry == "real":
+        return _build_real_case(mode, gamma)
     template = _make_template(geometry)
     layer = _make_layer()
     mask = _make_mask()

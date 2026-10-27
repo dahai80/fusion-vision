@@ -29,7 +29,7 @@ First consumer: `business/ai-apparelmockup` (apparel print mockup batching). Sec
 - `src/fusion_vision/compose.py` — pipeline: warp → place → feather → mask → lighting → blend → quantize → red-line assert; `compose_layers` for sequential multi-layer
 - `src/fusion_vision/qc.py` — `check_overflow` / `check_blank` / `check_color` (CIELAB ΔE) / `check_sharpness` (Laplacian variance); metrics only
 - `src/fusion_vision/io.py` / `color.py` / `config.py` / `errors.py` / `_types.py`
-- `tests/golden/` — 19 cases (3 geometries × 3 blend modes × 2 γ + 1 seeded-noise), sha256-locked in `golden.json` per platform key; `update_golden.py` regenerates (semver minor+ + review required)
+- `tests/golden/` — 22 cases (3 geometries × 3 blend modes × 2 γ + 1 seeded-noise + 3 real-sample from consumer fixtures in `tests/samples/`), sha256-locked in `golden.json` per platform key; `update_golden.py` regenerates (semver minor+ + review required)
 - `tests/perf/test_perf_2400.py` — 2400px < 2s benchmark
 
 Errors all inherit `VisionError`: `InputShapeError`, `DegenerateQuadError`, `BaseImageAlteredError`, `UnsupportedModeError`.

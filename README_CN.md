@@ -63,7 +63,7 @@ from fusion_vision import compose, ComposeConfig, BlendMode, Placement, NoiseSpe
 | `dst_quad` | 4×(x, y) | 必填 | 画布上的目标四角（任意凸四边形） |
 | `src_quad` | 4×(x, y) 或 None | None | 素材内裁剪区；None = 整张素材 |
 | `placement` | `Placement` | center, scale 1.0 | warp 后按锚点（"center" / "top_left"）缩放 |
-| `blend_mode` | `BlendMode` | NORMAL | normal / multiply / linear_burn |
+| `blend_mode` | `BlendMode` | NORMAL | normal / multiply / linear_burn；传普通字符串（小写或大写）会自动转换，未知的字符串抛 `InputShapeError` |
 | `opacity` | float [0, 1] | 1.0 | 图层不透明度 |
 | `lighting_gamma` | float [0, 2] | 0.6 | 0 表示关闭光照适配 |
 | `sigma` | float | 8.0 | 亮度场高斯模糊 σ |
@@ -185,7 +185,7 @@ fusion-flow 异常映射（DAG worker 约定）：
 ## 确定性与 Golden 回归
 
 - 所有随机性必须显式带种子。库里不存在无种子随机。
-- `tests/golden/` 用 sha256 哈希锁住 19 个输出用例（3 种基底几何 × 3 种混合模式 × 2 种 γ + 1 个带种子噪声用例），记录在 `golden.json`，按平台键（`{platform}-{machine}-cv{主.次}-np{主.次}`）索引。
+- `tests/golden/` 用 sha256 哈希锁住 22 个输出用例（3 种基底几何 × 3 种混合模式 × 2 种 γ + 1 个带种子噪声用例 + 3 个真实样图用例，样图来自消费方 fixture，存于 `tests/samples/`），记录在 `golden.json`，按平台键（`{platform}-{machine}-cv{主.次}-np{主.次}`）索引。
 - 平台键匹配时测试是严格的：输出 sha256 必须等于记录值。其他平台则与已提交的参考 PNG 比对，容差 max_abs_diff ≤ 1。
 - **任何改变输出字节的算子改动都是 semver minor+ 升级**，需要走评审更新 `golden.json` + `reference/`。重新生成：
 
