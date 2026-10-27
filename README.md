@@ -188,6 +188,8 @@ fusion-flow exception mapping (DAG worker convention):
 python tests/golden/update_golden.py
 ```
 
+- Local determinism acceptance: `python tests/perf/repro_check.py [runs]` (default 100) re-composes the 2400px perf case and asserts every run is byte-identical (sha256), with timing stats.
+
 - `opencv-python-headless` is locked to a patch range in `pyproject.toml`; an OpenCV upgrade that changes interpolation output will fail the golden test by design.
 
 ## Performance & Memory

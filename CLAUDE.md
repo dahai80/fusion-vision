@@ -68,6 +68,8 @@ ruff check . && ruff format --check .
 
 After any change that alters output bytes: `python tests/golden/update_golden.py`, review the `golden.json` + `reference/` diff, treat as semver minor+.
 
+Local determinism acceptance: `python tests/perf/repro_check.py` (100-run byte-identical sweep).
+
 Non-functional targets: 2400px compose < 2s on Apple Silicon; peak memory < 500MB (single float32 intermediate, freed promptly); sRGB only in M1 (ICC/wide-gamut is caller's job).
 
 ## Repo Conventions

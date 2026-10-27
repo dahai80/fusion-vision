@@ -188,6 +188,8 @@ fusion-flow 异常映射（DAG worker 约定）：
 python tests/golden/update_golden.py
 ```
 
+- 本地确定性验收：`python tests/perf/repro_check.py [runs]`（默认 100 次）对 2400px 性能用例反复合成，断言每次输出字节一致（sha256），并输出耗时统计。
+
 - `opencv-python-headless` 在 `pyproject.toml` 锁 patch 区间；OpenCV 升级若改变插值输出，golden 测试会按设计失败。
 
 ## 性能与内存
