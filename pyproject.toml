@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fusion-vision"
-version = "0.1.0"
+version = "0.2.0"
 description = "Deterministic image-composition operator library for the Fusion ecosystem: warp + mask + lighting + blend + QC, zero generative AI."
 readme = "README.md"
 requires-python = ">=3.11"

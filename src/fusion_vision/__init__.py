@@ -18,7 +18,7 @@ from .lighting import adapt, grain, luminance_field
 from .mask import apply_mask, dilate_mask, feather, rasterize_polygon
 from .warp import compute_homography, place, warp_to_quad
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 __all__ = [
     "compose",
