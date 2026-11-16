@@ -48,6 +48,11 @@ jobs:
       - name: Install package with test extras
         run: pip install -e ".[test]"
       - name: Run full test suite
+        # Hosted runners measure the 2400px perf gate at ~2.5-3s (PRD target
+        # 2s is for a quiet Apple Silicon dev machine), so relax the budget
+        # here via the env override instead of failing every run.
+        env:
+          FUSION_VISION_PERF_BUDGET_S: "3.5"
         run: python -m pytest tests/ -q
 
   repro:

@@ -1,5 +1,6 @@
 # Perf target (PRD SS8): 2400px compose < 2s on Apple Silicon.
 # Not a correctness test; generous margin to stay stable on shared runners.
+import os
 import time
 
 import numpy as np
@@ -31,8 +32,22 @@ def test_perf_2400_compose_under_2s():
         sigma=15.0,
         noise={"strength": 0.03, "seed": 7},
     )
-    started = time.perf_counter()
-    out = fv.compose(template, layer, mask, cfg)
-    elapsed = time.perf_counter() - started
+
+    # Budget is env-overridable: PRD target is 2s on a quiet Apple Silicon
+    # dev machine, but GitHub-hosted runners measure ~2.5-3s for the same
+    # code (slower cores + noisy neighbors), and a busy workstation skews
+    # a single sample arbitrarily. Median of 3 + env budget keeps the gate
+    # meaningful in both contexts.
+    budget_s = float(os.getenv("FUSION_VISION_PERF_BUDGET_S", "2.0"))
+    timings = []
+    out = None
+    for _ in range(3):
+        started = time.perf_counter()
+        out = fv.compose(template, layer, mask, cfg)
+        timings.append(time.perf_counter() - started)
+    elapsed = sorted(timings)[1]
     assert out.shape == (h, w, 3)
-    assert elapsed < 2.0, f"2400px compose took {elapsed:.3f}s (> 2s budget)"
+    assert elapsed < budget_s, (
+        f"2400px compose took {elapsed:.3f}s (> {budget_s}s budget; "
+        f"samples {[f'{t:.3f}' for t in timings]})"
+    )
